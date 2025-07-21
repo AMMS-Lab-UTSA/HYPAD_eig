@@ -1,4 +1,4 @@
-# DerivativesCantilever_vMatlab.py
+# HYPAD_eig
 
 This repository contains a Python implementation of two examples presented in the accompanying paper:  
 
