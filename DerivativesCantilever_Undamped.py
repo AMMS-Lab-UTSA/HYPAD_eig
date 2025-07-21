@@ -122,14 +122,14 @@ def Assembly(kelem, topo, Kglobal):
 
 
 
-# Define geometry and material properties (with perturbations for derivative computation)
+# Define geometry and material properties 
 print('Started Step #1')
 L = 5.0
 maxOrder = 10
-Emod = 68.9e9 + oti.e(1, order=maxOrder)
-rho = 2770.0 + oti.e(2, order=maxOrder)
-bs = 0.01 + oti.e(3, order=maxOrder)
-ht = 0.015 + oti.e(4, order=maxOrder)
+Emod = 68.9e9 
+rho = 2770.0 
+bs = 0.01 
+ht = 0.015 
 ne = 50
 ndim = 2
 nnode_el = 2
@@ -143,7 +143,6 @@ calc_eig=False
 nodes = oti.zeros((ne + 1, ndim + 1))
 nodes[:, 0] = oti.array(np.linspace(0, ne, num=ne + 1))
 nodes[:, 1] = oti.array(np.linspace(0.0, L, num=ne + 1))
-nodes[:, 1] += nodes[:, 1] * oti.e(5, order=maxOrder) / L
 
 topo = np.zeros((ne, 3), dtype=int)
 topo[:, 0] = np.linspace(0, ne, num=ne, dtype=int)
@@ -191,7 +190,7 @@ else:
 
 print('Finished Step #1')
 # Compute derivatives for first eigenpair
-neig = 2
+neig = 6
 # Number of Variales of interest
 Na = 5
 
@@ -221,8 +220,52 @@ for i in range(neig):
     # Loop for Derivatives Computation
     print(f'Started Step #3 for Eigenvalue {i+1}')
 
+    # Definiton of Perturbations to Input Parameters
+    Emod=68.9e9+oti.e(1,order=1)
+    rho=2770.0+oti.e(2,order=1)
+    bs=0.01+oti.e(3,order=1)
+    ht=0.015+oti.e(4,order=1)
+
+    nodes = oti.zeros((ne+1,ndim+1))
+    nodes[:,0] = oti.array(np.linspace(0, ne, num=ne+1))
+
+    nodes[:,1] = oti.array(np.linspace(0.0, L,num=ne+1))
+    nodes[:,1] = nodes[:,1]+nodes[:,1]*oti.e(5,order=1)/L
+    
+
     for ordi in range(1, maxOrder + 1):
         # Define Truncation Order
+        Emod += 0*oti.e(1,order=ordi)
+        rho += 0*oti.e(1,order=ordi)
+        bs += 0*oti.e(1,order=ordi)
+        ht += 0*oti.e(1,order=ordi)
+
+        nodes[:,1] += 0*oti.e(1,order=ordi)
+        nod = oti.zeros((ne+1,ndim))
+
+        # Evaluate OTI Residual
+        Kglob = oti.zeros((4*(ne+1),4*(ne+1)))
+        Mglob = oti.zeros((4*(ne+1),4*(ne+1)))
+
+        for conti in range(ne):
+            ind=topo[conti,:]
+            for k in range(nnode_el):
+                nod[k,:] = nodes[int(ind[k+1]),1:]
+            
+            K=StiffnessMatrix(nod,Emod,bs,ht)
+            M=MassMatrix(nod,rho,bs,ht)
+            Assembly(K,ind,Kglob)
+            Assembly(M,ind,Mglob)
+
+        Kglob2 = Kglob.copy()
+        Mglob2 = Mglob.copy()
+        nfixed=4
+        for conti in range(nfixed):
+            Kglob2[conti, conti] = TGV
+            Mglob2[conti, conti] = TGV
+
+
+
         Phi = u[:Kglob.shape[0], 0] + 0 * oti.e(1, order=ordi)
         lamda = u[Kglob.shape[0], 0] + 0 * oti.e(1, order=ordi)
         u[Kglob.shape[0], 0] = lamda
