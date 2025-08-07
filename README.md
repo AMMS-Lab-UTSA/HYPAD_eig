@@ -9,13 +9,10 @@ This repository contains a Python implementation of two examples presented in th
 ## Description
 The script `DerivativesCantilever_Undamped.py`:
 - Computes derivatives of eigenvalues and eigenvectors using hypercomplex numbers (via `pyoti`) and the residual-based differentiation method for the Undamped Cantilever Beam Problem
-- Measures computational performance metrics for different derivative orders
 
 The script `DerivativesCantilever_Underdamped.py`:
 - Computes derivatives of eigenvalues and eigenvectors using hypercomplex numbers (via `pyoti`) and the residual-based differentiation method for the Clasically Underdamped Cantilever Beam Problem
-- Measures computational performance metrics for different derivative orders
 
-The scripts also provides differentiation of the analytical solutions.
 
 ## Requirements
 To run this code you will need:
