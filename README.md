@@ -13,14 +13,6 @@ The script `DerivativesCantilever_Underdamped.py`:
 - Computes derivatives of eigenvalues and eigenvectors using hypercomplex numbers (via `pyoti`) and the residual-based differentiation method for the Clasically Underdamped Cantilever Beam Problem
 - Measures computational performance metrics for different derivative orders
 
-The script `DerivativesSSPlate_Undamped.py`:
-- Computes derivatives of eigenvalues and eigenvectors using hypercomplex numbers (via `pyoti`) and the residual-based differentiation method for the Simply Supported Plate Problem
-- Measures computational performance metrics for different derivative orders
-
-The script `DerivativesSSPlate_Underdamped.py`:
-- Computes derivatives of eigenvalues and eigenvectors using hypercomplex numbers (via `pyoti`) and the residual-based differentiation method for the Simply Supported Plate Problem
-- Measures computational performance metrics for different derivative orders
-
 The scripts also provides differentiation of the analytical solutions.
 
 ## Requirements
